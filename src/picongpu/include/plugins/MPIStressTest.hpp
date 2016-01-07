@@ -74,11 +74,13 @@ private:
     TestClass testClass;
     uint32_t notifyPeriod;
     uint32_t mode;
-        MPI_Comm mpi_world;
+    MPI_Comm mpi_world;
 
     void pluginLoad()
     {
-        MPI_Comm_dup(MPI_COMM_WORLD, &mpi_world);
+        //MPI_CHECK(MPI_Comm_dup(MPI_COMM_WORLD, &mpi_world));
+        GridController<simDim>& gc = Environment<simDim>::get().GridController();
+        mpi_world = gc.getCommunicator().getMPIComm();
         if (notifyPeriod > 0)
             printf("MPIStressTest activated with mode %i.\n",mode);
         Environment<>::get().PluginConnector().setNotificationPeriod(this, notifyPeriod);
@@ -86,6 +88,7 @@ private:
 
     void pluginUnload()
     {
+		//MPI_Comm_free(mpi_world);
     }
 };
 } //namespace MPIStressTest;
