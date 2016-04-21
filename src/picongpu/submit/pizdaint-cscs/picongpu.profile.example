@@ -1,0 +1,56 @@
+# this file is loaded from all PIConGPU template files `*.tpl` therefore please
+# copy this file to `$SCRATCH/picongpu.profile`
+#
+
+# General modules #############################################################
+#
+module swap PrgEnv-cray PrgEnv-gnu
+module load cmake/3.3.2
+module load cudatoolkit/7.0.28-1.0502.10742.5.1
+
+# Libraries ###################################################################
+module load boost
+module load cray-mpich
+
+# Other Software ##############################################################
+#
+module load hdf5-parallel
+module load zlib/1.2.8-CrayGNU-5.2.40
+
+# Environment #################################################################
+#
+# needs to be compiled by the user
+export PNGWRITER_ROOT=$SCRATCH/lib/pngwriter
+export SPLASH_ROOT=$SCRATCH/lib/splash
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PNGWRITER_ROOT/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SPLASH_ROOT/lib/
+
+export MPI_ROOT=$MPICH_DIR
+export HDF5_ROOT=$HDF5_DIR
+
+# define cray compiler target architecture
+# if not defined the linker crashed because wrong from `*/lib` instead
+# of `*/lib64` are used
+export CRAY_CPU_TARGET=x86-64
+
+# Compile for cluster nodes
+#   (CMake likes to unwrap the Cray wrappers)
+export CC=`which cc`
+export CXX=`which CC`
+
+export PICSRC=$HOME/src/picongpu
+# needed to call `tbg`
+export PATH=$PATH:$PICSRC/src/tools/bin
+
+# send me a mail on BEGIN, END, FAIL, REQUEUE, ALL,
+# TIME_LIMIT, TIME_LIMIT_90, TIME_LIMIT_80 and/or TIME_LIMIT_50
+export MY_MAILNOTIFY="FAIL"
+export MY_MAIL="someone@example.com"
+export MY_NAME="$(whoami) <$MY_MAIL>"
+
+# "tbg" default options #######################################################
+#   - SLURM (sbatch)
+#   - "normal" queue
+export TBG_SUBMIT="sbatch"
+export TBG_TPLFILE="submit/pizdaint-cscs/normal_profile.tpl"
