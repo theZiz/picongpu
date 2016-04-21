@@ -40,6 +40,8 @@
 #include <iomanip>
 #include <fstream>
 
+#define ENABLE_TIMINGS 10
+
 namespace PMacc
 {
 
@@ -251,8 +253,11 @@ public:
 
             /* dump 0% output */
             dumpTimes(tSimCalculation, tRound, roundAvg, currentStep);
-
-
+#if ( ENABLE_TIMINGS > 0 )
+            Environment<>::get().Manager().waitForAllTasks();
+            MPI_CHECK(MPI_Barrier(Environment<DIM3>::get().GridController().getCommunicator().getMPIComm()));
+            TimeIntervall scalingTimer; // time is recorded at construction
+#endif
             /** \todo currently we assume this is the only point in the simulation
              *        that is allowed to manipulate `currentStep`. Else, one needs to
              *        add and act on changed values via
@@ -267,6 +272,16 @@ public:
 
                 currentStep++;
                 Environment<>::get().SimulationDescription().setCurrentStep( currentStep );
+#if ( ENABLE_TIMINGS > 0 )
+                if(currentStep % ENABLE_TIMINGS==0)
+                {
+                    scalingTimer.toggleEnd();
+                    if(output)
+                    {
+                        std::cout<<"STEPTIME "<<currentStep<<" "<<(scalingTimer.getInterval()/1000.)<<" s"<<std::endl;
+                    }
+                }
+#endif
                 /*output after a round*/
                 dumpTimes(tSimCalculation, tRound, roundAvg, currentStep);
 
@@ -277,7 +292,15 @@ public:
 
             // simulatation end
             Environment<>::get().Manager().waitForAllTasks();
+#if ( ENABLE_TIMINGS > 0 )
+            MPI_CHECK(MPI_Barrier(Environment<DIM3>::get().GridController().getCommunicator().getMPIComm()));
 
+            scalingTimer.toggleEnd();
+            if(output)
+            {
+               std::cout<<"RUNTIME "<<runSteps<<" "<<(scalingTimer.getInterval()/1000.)<<" s"<<std::endl;
+            }
+#endif
             tSimCalculation.toggleEnd();
 
             if (output)
