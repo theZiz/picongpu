@@ -1,5 +1,5 @@
 #!/bin/bash -l
-# Copyright 2013-2016 Axel Huebl, Richard Pausch
+# Copyright 2013-2016 Axel Huebl, Richard Pausch, Rene Widera
 #
 # This file is part of PIConGPU.
 #
@@ -19,7 +19,7 @@
 #
 
 ## calculations will be performed by tbg ##
-TBG_queue="normal"
+TBG_queue="total"
 
 # settings that can be controlled by environment variables before submit
 TBG_mailSettings=${MY_MAILNOTIFY:-"ALL"}
@@ -41,7 +41,7 @@ TBG_nodes=!TBG_tasks
 
 ## end calculations ##
 
-# PIConGPU batch script for pizdaint' SLURM batch system
+# PIConGPU batch script for pizdaint SLURM batch system
 
 #SBATCH --partition=!TBG_queue
 #SBATCH --time=!TBG_wallTime
@@ -70,10 +70,6 @@ unset MODULES_NO_OUTPUT
 
 mkdir simOutput 2> /dev/null
 cd simOutput
-
-# we are not sure if the current mpi pinned memory correctly
-#   see bug https://github.com/ComputationalRadiationPhysics/picongpu/pull/438
-export OMPI_MCA_mpi_leave_pinned=0
 
 # Run PIConGPU
 srun  -n !TBG_tasks !TBG_dstPath/picongpu/bin/picongpu !TBG_author !TBG_programParams
