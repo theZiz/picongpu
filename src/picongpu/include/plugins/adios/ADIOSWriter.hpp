@@ -74,7 +74,9 @@
 #include "plugins/adios/restart/LoadSpecies.hpp"
 #include "plugins/adios/restart/RestartFieldLoader.hpp"
 #include "plugins/adios/NDScalars.hpp"
+#include "simulationControl/TimeInterval.hpp"
 
+#define ENABLE_ADIOS_TIMINGS 1
 
 namespace picongpu
 {
@@ -458,9 +460,23 @@ public:
 
     void checkpoint(uint32_t currentStep, const std::string checkpointDirectory)
     {
+#if ( ENABLE_ADIOS_TIMINGS == 1 )
+        Environment<>::get().Manager().waitForAllTasks();
+        MPI_CHECK(MPI_Barrier(Environment<simDim>::get().GridController().getCommunicator().getMPIComm()));
+        TimeIntervall timer; // time is recorded at construction
+#endif
         this->checkpointDirectory = checkpointDirectory;
 
         notificationReceived(currentStep, true);
+#if ( ENABLE_ADIOS_TIMINGS == 1 )
+        Environment<>::get().Manager().waitForAllTasks();
+        MPI_CHECK(MPI_Barrier(Environment<simDim>::get().GridController().getCommunicator().getMPIComm()));
+        timer.toggleEnd();
+        if(Environment<simDim>::get().GridController().getScalarPosition() == 0)
+        {
+            std::cout<<"ADIOS_RUNTIME "<<currentStep<<" "<<(timer.getInterval()/1000.)<<" s"<<std::endl;
+        }
+#endif
     }
 
     void restart(uint32_t restartStep, const std::string restartDirectory)
