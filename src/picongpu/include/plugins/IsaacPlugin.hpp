@@ -489,6 +489,15 @@ private:
                     json_object_set_new( message, "distance absolute", json_real( -2.9 ) );
                 else //3:3:4
                     json_object_set_new( message, "distance absolute", json_real( -2.8 ) );
+                js = json_array();
+                json_object_set_new( message, "weight", js );
+                for (int i = 0; i < boost::mpl::size< Fields_Seq >::type::value; i++)
+                {
+                    if (i == 0 || i == 2) //E and J field
+                        json_array_append_new( js, json_real( 1 ) );
+                    else
+                        json_array_append_new( js, json_real( 0 ) );
+                }
                 visualization->communicator->addMessage( message );
             }
         }
