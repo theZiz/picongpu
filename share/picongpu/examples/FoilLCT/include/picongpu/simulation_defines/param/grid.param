@@ -49,7 +49,7 @@ namespace picongpu
     {
         /** equals X
          *  unit: meter */
-        constexpr float_64 CELL_WIDTH_SI = 0.8e-6 / 384.;
+        constexpr float_64 CELL_WIDTH_SI = 0.8e-6 / 384. * 4.0;
         /** equals Y - the laser & moving window propagation direction
          *  unit: meter */
         constexpr float_64 CELL_HEIGHT_SI = CELL_WIDTH_SI;
@@ -61,7 +61,7 @@ namespace picongpu
          *  unit: seconds                       CFL criteria for Yee MW Solver
          *                                             2D: sqrt(2)
          *                                             3D: sqrt(3)   */
-        constexpr float_64 DELTA_T_SI = CELL_WIDTH_SI / ( 1.4143 * SPEED_OF_LIGHT_SI );
+        constexpr float_64 DELTA_T_SI = CELL_WIDTH_SI / ( 1.7321 * SPEED_OF_LIGHT_SI );
 
     } // namespace SI
 

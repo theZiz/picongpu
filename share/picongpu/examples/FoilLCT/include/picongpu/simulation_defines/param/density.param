@@ -49,7 +49,7 @@ namespace SI
      * 8CB (4'-octyl-4-cyanobiphenyl).
      */
      constexpr float_64 nc = 1.11485e21 * 1.e6 / 0.8 / 0.8;
-     constexpr float_64 BASE_DENSITY_SI = 192. * nc;
+     constexpr float_64 BASE_DENSITY_SI = 10. * nc;
 
 } // namespace SI
 
