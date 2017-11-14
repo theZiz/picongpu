@@ -181,7 +181,7 @@ endif(PARAM_OVERWRITES)
 ################################################################################
 
 option(CUDAMEMTEST_ENABLE "Build cuda_memtest and the helper mpiInfo \
-                          (allow GPU health test before running PIConGPU)" ON)
+                          (allow GPU health test before running PIConGPU)" OFF)
 
 if((NOT ALPAKA_ACC_GPU_CUDA_ENABLE) OR ALPAKA_CUDA_COMPILER MATCHES "clang")
     # cuda_memtest is not compiling with host accelerator of alpaka or clang
