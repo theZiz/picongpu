@@ -50,7 +50,7 @@ namespace picongpu
      *
      * Adjust the settings of the selected profile in laser.param
      */
-    namespace laserProfile = laserGaussianBeam;
+    namespace laserProfile = laserWavepacket;
 
     /** @namespace fieldSolver
      *

@@ -93,7 +93,8 @@ value_identifier( float_X, MassRatioHydrogen, 1836.152672 );
 value_identifier( float_X, ChargeRatioHydrogen, -1.0 );
 
 /* ratio relative to BASE_DENSITY (n_e) */
-value_identifier( float_X, DensityRatioHydrogen, 25. / 158. );
+// value_identifier( float_X, DensityRatioHydrogen, 25. / 158. );
+value_identifier( float_X, DensityRatioHydrogen, 1.0 );
 
 using ParticleFlagsHydrogen = bmpl::vector<
     particlePusher< UsedParticlePusher >,
@@ -102,24 +103,14 @@ using ParticleFlagsHydrogen = bmpl::vector<
     current< UsedParticleCurrentSolver >,
     massRatio< MassRatioHydrogen >,
     chargeRatio< ChargeRatioHydrogen >,
-    densityRatio< DensityRatioHydrogen >,
-    atomicNumbers< ionization::atomicNumbers::Hydrogen_t >,
-    ionizationEnergies< ionization::energies::AU::Hydrogen_t >,
-    effectiveNuclearCharge< ionization::effectiveNuclearCharge::Hydrogen_t >,
-    ionizers<
-        MakeSeq_t<
-            particles::ionization::BSIEffectiveZ< Electrons >,
-            particles::ionization::ADKLinPol< Electrons >,
-            particles::ionization::ThomasFermi< Electrons >
-        >
-    >
+    densityRatio< DensityRatioHydrogen >
 >;
 
 /* define species Hydrogen */
 using Hydrogen = Particles<
     bmpl::string< 'H' >,
     ParticleFlagsHydrogen,
-    IonParticleAttributes
+    DefaultParticleAttributes
 >;
 
 /*--------------------------- C ---------------------------------------------*/
@@ -129,7 +120,7 @@ value_identifier( float_X, MassRatioCarbon, 22032.0 );
 value_identifier( float_X, ChargeRatioCarbon, -6.0 );
 
 /* ratio relative to BASE_DENSITY (n_e) */
-value_identifier( float_X, DensityRatioCarbon, 21. / 158. );
+value_identifier( float_X, DensityRatioCarbon, 22. / 158. );
 
 using ParticleFlagsCarbon = bmpl::vector<
     particlePusher< UsedParticlePusher >,
@@ -141,56 +132,22 @@ using ParticleFlagsCarbon = bmpl::vector<
     densityRatio< DensityRatioCarbon >,
     atomicNumbers< ionization::atomicNumbers::Carbon_t >,
     ionizationEnergies< ionization::energies::AU::Carbon_t >,
-    effectiveNuclearCharge< ionization::effectiveNuclearCharge::Carbon_t >,
+    effectiveNuclearCharge< ionization::effectiveNuclearCharge::Carbon_t >
+/*  ,
     ionizers<
         MakeSeq_t<
-            particles::ionization::BSIEffectiveZ< Electrons >,
-            particles::ionization::ADKLinPol< Electrons >,
-            particles::ionization::ThomasFermi< Electrons >
+            particles::ionization::BSIEffectiveZ< Electrons >
+            , particles::ionization::ADKLinPol< Electrons >
+//          , particles::ionization::ThomasFermi< Electrons >
         >
     >
+*/
 >;
 
 /* define species Carbon */
 using Carbon = Particles<
     bmpl::string< 'C' >,
     ParticleFlagsCarbon,
-    IonParticleAttributes
->;
-
-/*--------------------------- N ---------------------------------------------*/
-
-/* ratio relative to BASE_CHARGE and BASE_MASS */
-value_identifier( float_X, MassRatioNitrogen, 25716.852 );
-value_identifier( float_X, ChargeRatioNitrogen, -7.0 );
-
-/* ratio relative to BASE_DENSITY (n_e) */
-value_identifier( float_X, DensityRatioNitrogen, 1. / 158. );
-
-using ParticleFlagsNitrogen = bmpl::vector<
-    particlePusher< UsedParticlePusher >,
-    shape< UsedParticleShape >,
-    interpolation< UsedField2Particle >,
-    current< UsedParticleCurrentSolver >,
-    massRatio< MassRatioNitrogen >,
-    chargeRatio< ChargeRatioNitrogen >,
-    densityRatio< DensityRatioNitrogen >,
-    atomicNumbers< ionization::atomicNumbers::Nitrogen_t >,
-    ionizationEnergies< ionization::energies::AU::Nitrogen_t >,
-    effectiveNuclearCharge< ionization::effectiveNuclearCharge::Nitrogen_t >,
-    ionizers<
-        MakeSeq_t<
-            particles::ionization::BSIEffectiveZ< Electrons >,
-            particles::ionization::ADKLinPol< Electrons >,
-            particles::ionization::ThomasFermi< Electrons >
-        >
-    >
->;
-
-/* define species Nitrogen */
-using Nitrogen = Particles<
-    bmpl::string< 'N' >,
-    ParticleFlagsNitrogen,
     IonParticleAttributes
 >;
 
@@ -203,9 +160,8 @@ using Nitrogen = Particles<
  */
 using VectorAllSpecies = MakeSeq_t<
     Electrons,
-    Hydrogen,
-    Carbon,
-    Nitrogen
+    Hydrogen
+//   , Carbon
 >;
 
 } // namespace picongpu

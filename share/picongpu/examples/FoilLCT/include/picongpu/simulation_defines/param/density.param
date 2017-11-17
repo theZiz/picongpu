@@ -75,8 +75,8 @@ namespace densityProfiles
             const float_64 y( position_SI.y() * 1.e6 );
 
             // target begin & end (plateau)
-            constexpr float_64 y0( 0.5 );
-            constexpr float_64 y1( y0 + 1.0 );
+            constexpr float_64 y0( 1.0 );
+            constexpr float_64 y1( y0 + 1.5 );
             // exponential pre-expanded density
             constexpr float_64 L( 10.e-3 );
             constexpr float_64 L_cutoff( 4. * L );
