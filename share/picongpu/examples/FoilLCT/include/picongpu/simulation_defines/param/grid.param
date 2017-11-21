@@ -49,7 +49,7 @@ namespace picongpu
     {
         /** equals X
          *  unit: meter */
-        constexpr float_64 CELL_WIDTH_SI = 0.8e-6 / 384. * 6.;
+        constexpr float_64 CELL_WIDTH_SI = 0.8e-6 / 512. * 6.;
         /** equals Y - the laser & moving window propagation direction
          *  unit: meter */
         constexpr float_64 CELL_HEIGHT_SI = CELL_WIDTH_SI;
